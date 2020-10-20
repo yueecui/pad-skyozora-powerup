@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PAD战友网内容优化
 // @namespace    https://github.com/yueecui/pad_skyozora_powerup
-// @version      0.0.1
+// @version      0.0.2
 // @description  优化PAD战友网
 // @icon         https://pad.skyozora.com/images/egg.ico
 // @author       Yuee
@@ -84,25 +84,36 @@
         {t: 'indexOf', find: '隨機生成<img src="images/drops/Poison.png" width="20">', action: 'flagOn', flag: '转毒'},
         {t: 'indexOf', find: '寶珠變成<img src="images/drops/Poison.png" width="20">', action: 'flagOn', flag: '转毒'},
         {t: 'indexOf', find: '<img src="images/change.gif"> <img src="images/drops/Poison.png" width="20">', action: 'flagOn', flag: '转毒'},
+        {t: 'RegExp', re: /所有寶珠變為.*?<img src="images\/drops\/Poison\.png" width="20">/, action: 'flagOn', flag: '转毒'},
+
         {t: 'indexOf', find: '隨機生成<img src="images/drops/Poison+.png" width="20">', action: 'flagOn', flag: '转强毒'},
         {t: 'indexOf', find: '寶珠變成<img src="images/drops/Poison+.png" width="20">', action: 'flagOn', flag: '转强毒'},
         {t: 'indexOf', find: '<img src="images/change.gif"> <img src="images/drops/Poison+.png" width="20">', action: 'flagOn', flag: '转强毒'},
+        {t: 'RegExp', re: /所有寶珠變為.*?<img src="images\/drops\/Poison\+\.png" width="20">/, action: 'flagOn', flag: '转强毒'},
 
-        {t: 'RegExp', re: /(\d+)回合內，<img src="images\/drops\/Poison\.png" width="20">的掉落機率提升(\d+)%/, action: 'setValue', flag: '毒珠掉率'},
-        {t: 'RegExp', re: /(\d+)回合內，.*?<img src="images\/drops\/Poison\.png" width="20"\s?\/?>的掉落機率提升(\d+)%/, action: 'setValue', flag: '毒珠掉率'},
-        {t: 'RegExp', re: /(\d+)回合內，<img src="images\/drops\/Poison\+\.png" width="20">的掉落機率提升(\d+)%/, action: 'setValue', flag: '强毒珠掉率'},
-        {t: 'RegExp', re: /(\d+)回合內，.*?<img src="images\/drops\/Poison\+\.png" width="20"\s?\/?>的掉落機率提升(\d+)%/, action: 'setValue', flag: '强毒珠掉率'},
-
+        {t: 'RegExp', re: /所有寶珠變為.*?<img src="images\/drops\/Dead\.png" width="20">/, action: 'flagOn', flag: '转废'},
         {t: 'indexOf', find: '隨機生成<img src="images/drops/Dead.png" width="20">', action: 'flagOn', flag: '转废'},
         {t: 'indexOf', find: '寶珠變成<img src="images/drops/Dead.png" width="20">', action: 'flagOn', flag: '转废'},
         {t: 'indexOf', find: '<img src="images/change.gif"> <img src="images/drops/Dead.png" width="20">', action: 'flagOn', flag: '转废'},
 
-        {t: 'RegExp', re: /(\d+)回合內，<img src="images\/drops\/Dead\.png" width="20">的掉落機率提升(\d+)%/, action: 'setValue', flag: '废珠掉率'},
-        {t: 'RegExp', re: /(\d+)回合內，.*?<img src="images\/drops\/Dead\.png" width="20"\s?\/?>的掉落機率提升(\d+)%/, action: 'setValue', flag: '废珠掉率'},
-
         {t: 'indexOf', find: '隨機生成<img src="images/drops/Bomb.png" width="20">', action: 'flagOn', flag: '转炸弹'},
         {t: 'indexOf', find: '寶珠變成<img src="images/drops/Bomb.png" width="20">', action: 'flagOn', flag: '转炸弹'},
         {t: 'indexOf', find: '<img src="images/change.gif"> <img src="images/drops/Bomb.png" width="20">', action: 'flagOn', flag: '转炸弹'},
+
+        {t: 'indexOf', find: '隨機生成<img src="images/drops/Bomb_Lock.png" width="20">', action: 'flagOn', flag: '转锁炸弹'},
+        {t: 'indexOf', find: '寶珠變成<img src="images/drops/Bomb_Lock.png" width="20">', action: 'flagOn', flag: '转锁炸弹'},
+        {t: 'indexOf', find: '<img src="images/change.gif"> <img src="images/drops/Bomb_Lock.png" width="20">', action: 'flagOn', flag: '转锁炸弹'},
+
+        {t: 'RegExp', re: /所有寶珠變為(.+?)(?:，.*)?(?:\s<.*)?$/, action: 'setValue', flag: '洗版'},
+
+        {t: 'RegExp', re: /(\d+)回合內，.*?<img src="images\/drops\/Poison\.png" width="20"\s?\/?>.*?的掉落機率提升(\d+)%/, action: 'setValue', flag: '毒珠掉率'},
+        {t: 'RegExp', re: /(\d+)回合內，.*?<img src="images\/drops\/Poison\+\.png" width="20"\s?\/?>.*?的掉落機率提升(\d+)%/, action: 'setValue', flag: '强毒珠掉率'},
+        {t: 'RegExp', re: /(\d+)回合內，.*?<img src="images\/drops\/Dead\.png" width="20"\s?\/?>.*?的掉落機率提升(\d+)%/, action: 'setValue', flag: '废珠掉率'},
+
+        {t: 'RegExp', re: /(\d+)回合內，有(\d+)%機率隨機鎖定掉落的寶珠/, action: 'setValue', flag: '锁珠掉率'},
+        {t: 'RegExp', re: /(\d+)回合內，有(\d+)%機率掉落超暗闇寶珠/, action: 'setValue', flag: '超暗珠掉率'},
+
+        {t: 'RegExp', re: /(\d+)回合內，所有寶珠會以鎖定狀態掉落/, action: 'setValue', flag: '必掉落锁珠'},
 
         {t: 'RegExp', re: /封鎖(.+)寵物(\d+~?\d?)回合/, action: 'setValue', flag: '封锁'},
         {t: 'RegExp', re: /(\d+)回合內，隨機將1個隊員換成隊長/, action: 'setValue', flag: '换队长'},
@@ -112,14 +123,17 @@
         {t: 'RegExp', re: /當前所有技能的冷卻時間增加 (\d+~?\d?) 回合/, action: 'setValue', flag: '坐下'},
         {t: 'RegExp', re: /(\d+)回合內，寶珠移動時間減少(\d+)秒/, action: 'setValue', flag: '转珠时间减少'},
         {t: 'RegExp', re: /(\d+)回合內，寶珠移動時間變成原來的(\d+)%/, action: 'setValue', flag: '转珠时间减少%'},
+        {t: 'RegExp', re: /(\d+)回合內，攻擊力變成原來的(\d+)%/, action: 'setValue', flag: '攻击力减少%'},
+        {t: 'RegExp', re: /(\d+)回合內，回復力變成原來的(\d+)%/, action: 'setValue', flag: '回复力减少%'},
 
         {t: 'indexOf', find: '隱藏全畫面的寶珠', action: 'flagOn', flag: '全黑'},
-        {t: 'RegExp', re: /(\d+)回合內，所有寶珠變成超暗闇狀態/, action: 'setValue', flag: '超黑暗所有'},
+        {t: 'RegExp', re: /(\d+)回合內，(.+)變成超暗闇狀態/, action: 'setValue', flag: '超暗'},
 
         {t: 'RegExp', re: /(\d+)回合內，(.+)無法被消除/, action: 'setValue', flag: '无法消除'},
         {t: 'RegExp', re: /(\d+)回合內，盤面上出現大小為 (.+) 的雲遮擋寶珠/, action: 'setValue', flag: '云雾'},
-        {t: 'RegExp', re: /(\d+)回合內，指定位置上的寶珠每隔1秒不斷轉換/, action: 'setValue', flag: '宝珠变换'},
-        {t: 'RegExp', re: /將隨機(\d+)粒.*?鎖定/, action: 'setValue', flag: '宝珠锁定'},
+        {t: 'RegExp', re: /(\d+)回合內，(.+?)上的寶珠每隔(\d+)秒不斷轉換/, action: 'setValue', flag: '宝珠变换'},
+
+        {t: 'RegExp', re: /將(.+?)鎖定/, action: 'setValue', flag: '宝珠锁定'},
         {t: 'RegExp', re: /(\d+)回合內，無法移動(.+)的寶珠/, action: 'setValue', flag: '贴条'},
 
         {t: 'RegExp', re: /造成玩家目前HP(\d+)%的傷害/, action: 'setValue', flag: '重力'},
@@ -128,6 +142,8 @@
         {t: 'RegExp', re: /(\d+)回合內，將受到的(.+)屬性傷害轉換成自己的生命值/, action: 'setValue', flag: '属吸'},
 
         {t: 'RegExp', re: /HP在上限(\d+)%或以上的話，受到致命傷害時，將會以1點HP生還/, action: 'setValue', flag: '根性'},
+        {t: 'RegExp', re: /HP在上限(\d+)%或以上的話，受到致命傷害時，將會以(\d+)%HP生還/, action: 'setValue', flag: '高回血根性'},
+        
         {t: 'RegExp', re: /(\d+)回合內，受到的屬性傷害減少(\d+)%/, action: 'setValue', flag: '减伤盾'},
         {t: 'RegExp', re: /受到的(.+)屬性傷害減少(\d+)%/, action: 'setValue', flag: '属性减伤盾'},
         {t: 'RegExp', re: /由(.+)類寵物造成的傷害減少(\d+)%/, action: 'setValue', flag: '类型减伤盾'},
@@ -138,15 +154,21 @@
     ]
 
     const flag_show_html = {
-        '全黑': {a: 'text', t: '<img src="images/skill/skill-68.png" width="20"> 宝珠全黑', sk: '防黑'},
-        '转毒': {a: 'text', t: '<img src="images/skill/skill-70.png" width="20"> 转出<img src="images/drops/Poison.png" width="20">', sk: '防毒'},
-        '转强毒': {a: 'text', t: '<img src="images/skill/skill-70.png" width="20"> 转出<img src="images/drops/Poison+.png" width="20">', sk: '防毒'},
+        '转毒': {a: 'text', t: '<img src="images/skill/skill-70.png" width="20"> 转换出<img src="images/drops/Poison.png" width="20">', sk: '防毒'},
+        '转强毒': {a: 'text', t: '<img src="images/skill/skill-70.png" width="20"> 转换出<img src="images/drops/Poison+.png" width="20">', sk: '防毒'},
+        '转废': {a: 'text', t: '<img src="images/skill/skill-69.png" width="20"> 转换出<img src="images/drops/Dead.png" width="20">', sk: '防废'},
+        '转炸弹': {a: 'text', t: '<img src="images/skill/skill-69.png" width="20"> 转换出<img src="images/drops/Bomb.png" width="20">', sk: '防废'},
+        '转锁炸弹': {a: 'text', t: '<img src="images/skill/skill-69.png" width="20"> 转换出<img src="images/drops/Bomb_Lock.png" width="20">', sk: '防废'},
+
+        '洗版': {a: 'replace', t: '洗版(<value.0>)'},
+
         '毒珠掉率': {a: 'replace', t: '<img src="images/drops/Poison.png" width="20">掉率提升(<value.1>%)(<value.0>回合)'},
         '强毒珠掉率': {a: 'replace', t: '<img src="images/drops/Poison+.png" width="20">掉率提升(<value.1>%)(<value.0>回合)'},
-
-        '转废': {a: 'text', t: '<img src="images/skill/skill-69.png" width="20"> 转出<img src="images/drops/Dead.png" width="20">', sk: '防废'},
-        '转炸弹': {a: 'text', t: '<img src="images/skill/skill-69.png" width="20"> 转出<img src="images/drops/Bomb.png" width="20">', sk: '防废'},
         '废珠掉率': {a: 'replace', t: '<img src="images/drops/Dead.png" width="20">掉率提升(<value.1>%)(<value.0>回合)'},
+        '锁珠掉率': {a: 'replace', t: '锁珠掉率提升(<value.1>%)(<value.0>回合)'},
+        '超暗珠掉率': {a: 'replace', t: '超暗珠掉率提升(<value.1>%)(<value.0>回合)'},
+        
+        '必掉落锁珠': {a: 'replace', t: '必掉落锁珠(<value.0>回合)'},
 
         '封锁': {a: 'replace', t: '<img src="images/skill/skill-52.png" width="20"> 封锁<value.0>宠物(<value.1>回合)', sk: '防绑'},
         '换队长': {a: 'replace', t: '换队长(随机队员)(<value.0>回合)', text: '换队长'},
@@ -156,12 +178,16 @@
         '坐下': {a: 'replace', t: '<img src="images/skill/skill2-11.png" width="20"> 坐下(<value.0>回合)', sk: '防坐'},
         '转珠时间减少': {a: 'replace', t: '转珠时间减少<value.1>秒(<value.0>回合)'},
         '转珠时间减少%': {a: 'replace', t: '转珠时间变为<value.1>%(<value.0>回合)'},
-        '超黑暗所有': {a: 'replace', t: '<img src="images/skill/skill-68.png" width="20"> 所有宝珠变为超黑暗(<value.0>回合)', sk: '防黑'},
+        '攻击力减少%': {a: 'replace', t: '<img src="images/skill/skill-66.png" width="20"> 攻击力变为<value.1>%(<value.0>回合)'},
+        '回复力减少%': {a: 'replace', t: '<img src="images/skill/skill-67.png" width="20"> 回复力变为<value.1>%(<value.0>回合)'},
+
+        '全黑': {a: 'text', t: '<img src="images/skill/skill-68.png" width="20"> 宝珠全黑', sk: '防黑'},
+        '超暗': {a: 'replace', t: '<img src="images/skill/skill-68.png" width="20"> 宝珠变超暗(<value.1>)(<value.0>回合)', sk: '防黑'},
 
         '无法消除': {a: 'replace', t: '<value.1>无法被消除(<value.0>回合)'},
         '云雾': {a: 'replace', t: '<img src="images/skill/skill-54.png" width="20"> 出现 <value.1> 云雾(<value.0>回合)', sk: '防云'},
-        '宝珠变换': {a: 'replace', t: '宝珠变换(指定位置)(<value.0>回合)'},
-        '宝珠锁定': {a: 'replace', t: '<img src="images/skill/skill-60.png" width="20"> 宝珠锁定(<value.0>颗)', sk: '解锁'},
+        '宝珠变换': {a: 'replace', t: '宝珠变换(<value.1>)(间隔<value.2>秒/<value.0>回合)'},
+        '宝珠锁定': {a: 'replace', t: '<img src="images/skill/skill-60.png" width="20"> 宝珠锁定(<value.0>)', sk: '解锁'},
         '贴条': {a: 'replace', t: '<img src="images/skill/skill-55.png" width="20"> 贴条(<value.1>)(<value.0>回合)', sk: '防贴条'},
 
         '重力': {a: 'replace', t: '重力(<value.0>%)'},
@@ -169,6 +195,7 @@
         '状态无效': {a: 'replace', t: '状态无效(<value.0>回合)'},
         '属吸': {a: 'replace', t: '<value.1>属性吸收(<value.0>回合)', ab: 1},
         '根性': {a: 'replace', t: '<img src="images/skill/skill-45.png" width="20"> 根性(<value.0>%)', sk: '追击'},
+        '高回血根性': {a: 'replace', t: '黄根性(<value.0>%发动/<value.1>%回复)'},
         '减伤盾': {a: 'replace', t: '减伤盾(<value.1>%)(<value.0>回合)'},
         '属性减伤盾': {a: 'replace', t: '<value.0>属性减伤盾(<value.1>%)'},
         '类型减伤盾': {a: 'replace', t: '<value.0>类减伤盾(<value.1>%)'},
@@ -214,7 +241,7 @@
         }
     }
 
-    // type: 0=固有特性, 1=先制使用, 2=普通, -1=未知类型
+    // type: 0=固有特性, 1=先制使用, 2=普通, 3=死亡时是呀，-1=未知类型
     const check_skill_line = skill_line => {
         let skill_info = {
             name: '',
@@ -238,10 +265,21 @@
             }else if ($skill_name_part.length == 2){
                 skill_info.name = $skill_name_part.eq(1).text();
                 let skill_type = $skill_name_part.eq(0).text();
-                if (skill_type == '[先制使用]'){
-                    skill_info.type = 1;
-                }else if (skill_type != ''){
-                    skill_info.type = -1;
+                switch(skill_type){
+                    case '[固有特性]':
+                        skill_info.type = 0;
+                        break;
+                    case '[先制使用]':
+                        skill_info.type = 1;
+                        break;
+                    case '[死亡時使用]':
+                        skill_info.type = 3;
+                        break;
+                    case '':
+                        break;
+                    default:
+                        console.error('错误的skill_part：', $skill_name_part);
+                        skill_info.type = -1;                    
                 }
             }
             skill_info.desc = skill_split[1];
@@ -283,6 +321,7 @@
                     0: [],
                     1: [],
                     2: [],
+                    3: [],
                 },
                 has_flag: false,
             };
@@ -332,7 +371,7 @@
         let normal_count = 0;
 
         for (let monster_info of all_monster_info){
-            for (let flag_type of [0, 1, 2]){
+            for (let flag_type of [0, 1, 2, 3]){
                 for (let flag_info of monster_info.flag[flag_type]){
                     let flag_setting = flag_show_html[flag_info.f];
                     if (flag_setting.sk){
@@ -353,9 +392,10 @@
                                 }
                         }
                     }else if (flag_setting.ab){
-                        let element = flag_info.v[flag_setting.ab];
-                        prevent_detail.absorb[element] = true;
                         prevent_detail.has_absorb = true;
+                        for (let element of flag_info.v[flag_setting.ab].split('、')){
+                            prevent_detail.absorb[element] = true;
+                        }
                     }else if (flag_setting.combo){
                         let max_combo = parseInt(flag_info.v[flag_setting.combo]);
                         prevent_detail.max_combo = max_combo > prevent_detail.max_combo ? max_combo : prevent_detail.max_combo;
@@ -467,7 +507,7 @@
 
             let $td = $('<td></td>').appendTo($tr);
             let only_normal_skill = true;
-            for (let type of [0, 1, 2]){
+            for (let type of [0, 1, 3, 2]){
                 for (let flag_info of monster_info.flag[type]){
                     if ($td.text().length > 0){
                         if (type == 2){
@@ -496,6 +536,10 @@
                             break;
                         case 2:
                             show_text = '<span class="skill normal-skill">' + show_text + '</span>';
+                            break;
+                        case 3:
+                            show_text = '<span class="skill" style="color:#99e8ff">[死亡] ' + show_text + '</span>';
+                            only_normal_skill = false;
                             break;
                     }
                     $td.append(show_text);
