@@ -56,6 +56,66 @@
         '協力！牛魔王降臨！': [
             {n:'牛魔王', i:'6577', t:''},
         ],
+        'ワダツミ降臨！': [
+            {n:'水之希石【中】', i:'4459', t:'需进化'},
+        ],
+        'トト＆ソティス降臨！': [
+            {n:'光之希石【中】', i:'4461', t:'需进化'},
+            {n:'暗之希石【中】', i:'4462', t:'需进化'},
+        ],
+        'パズドラクロス・アナ降臨！': [
+            {n:'可憐的龍喚士・安娜的希石', i:'4538', t:''},
+        ],
+        'ハヌマーン降臨！': [
+            {n:'忠心的白猿臣・哈奴曼的希石', i:'4521', t:''},
+        ],
+        'レイワ降臨！': [
+            {n:'激動的監視者・令和', i:'5302', t:''},
+        ],
+        'ブラフマー降臨！': [
+            {n:'金掌之創壞神・梵天的希石', i:'5484', t:''},
+        ],
+        'ガイノウト降臨！': [
+            {n:'雷天之頑龍王・蓋洛多的希石', i:'4473', t:''},
+        ],
+        '協力！エルメ降臨！': [
+            {n:'靜眼的骸龍契士・艾爾薇＝固', i:'3740', t:''},
+        ],
+        'リントヴルム降臨！': [
+            {n:'冥爪之海蛇龍・林德蟲的希石', i:'5073', t:''},
+        ],
+        '関銀屏参上！': [
+            {n:'火之希石【中】', i:'4458', t:'需进化'},
+        ],
+        'ガイア降臨！': [
+            {n:'木之希石【中】', i:'4460', t:'需进化'},
+            {n:'斷決之起源神・蓋婭的希石', i:'4508', t:'双进化'},
+        ],
+        'エイル降臨！': [
+            {n:'冥刀之醫女神・埃爾', i:'4635', t:''},
+            {n:'點陣圖・影刀之醫女神・埃爾', i:'6336', t:''},
+        ],
+        '超極限ドラゴンラッシュ！': [
+            {n:'黑天之幻龍王・塞洛古∞的希石', i:'4557', t:''},
+        ],
+        'イザナミ降臨！': [
+            {n:'光之希石【中】', i:'4461', t:'需进化'},
+            {n:'萬象之皇妃神・伊邪那美的希石', i:'4529', t:'双进化'},
+            {n:'暗之希石【中】', i:'4462', t:'需进化'},
+            {n:'平定之黃泉神・伊邪那美的希石', i:'4553', t:'双进化'},
+        ],
+        'ビッグフット降臨！': [
+            {n:'輝山之魔原獣・大腳怪的希石', i:'4550', t:''},
+        ],
+        '協力！ドロシー降臨！': [
+            {n:'桃樂絲的銀靴', i:'5391', t:''},
+            {n:'魔旅行者・桃樂西的希石', i:'5424', t:''},
+        ],
+        'ボーマ降臨！': [
+            {n:'火之精靈王・波曼的希石', i:'4484', t:''},
+        ],
+
+
         // '0000': [
         //     {n:'0000', i:'0000', t:''},
         // ],
@@ -94,25 +154,31 @@
         // ],
     }
 
-    const get_stage_list = ($base) =>{
-        let $a_groups = $base.find('a');
+    const get_stage_list = () =>{
+        // 降临时间表
+        let $a_groups = $('.item').eq(0).find('table').eq(1).find('a');
         let stage_list = [];
+        let added_stage = {};
 
         for (let i = 0;i<$a_groups.length;i++){
             let $stage = $a_groups.eq(i);
-            let stage_info = {
-                name: $stage.attr('title'),
-                url: $stage.attr('href'),
-                img_url: $stage.find('img').attr('src'),
+            let stage_name = $stage.attr('title');
+            if (stage_drop_map[stage_name] && !added_stage[stage_name]){
+                stage_list.push({
+                    name: stage_name,
+                    url: $stage.attr('href'),
+                    img_url: $stage.find('img').attr('src'),
+                });
+                added_stage[stage_name] = true;
             }
-            stage_list.push(stage_info);
         }
+
         return stage_list;
     }
 
     const update_stage_info = () =>{
-        const $base_td = $('.item').eq(0).find('table').eq(1).find('tr').eq(2).children('td').eq(1);
-        let stage_list = get_stage_list($base_td);
+        let stage_list = get_stage_list();
+        let $base_td = $('.item').eq(0).find('table').eq(1).find('tr').eq(2).children('td').eq(1);
         $base_td.empty();
 
         let $data_table = $('<table class="daily-stage-info" cellspacing="0"></table>').appendTo($base_td);

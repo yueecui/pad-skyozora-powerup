@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         PAD战友网内容优化
+// @name         PAD战友网内容扩展-关卡
 // @namespace    https://github.com/yueecui/pad_skyozora_powerup
 // @version      0.0.2
-// @description  优化PAD战友网
+// @description  扩展PAD战友网关卡信息的展现
 // @icon         https://pad.skyozora.com/images/egg.ico
 // @author       Yuee
 // @match        *://pad.skyozora.com/stage/*
@@ -13,35 +13,7 @@
 (function() {
     'use strict';
 
-    const stage_note = {
-        '美周郎 超地獄級 - 周瑜参上！': {
-            note: '测试文字测试文字',
-            skill: ['防云'],
-        },
-        '可憐な龍喚士 クロス級 - パズドラクロス・アナ降臨！': {
-            note: '使劲！使劲！再使劲！',
-            skill: ['防云'],
-        }
-    }
-
-    const player_skill_map = {
-        '解锁': '<img src="images/skill/skill-60.png" width="20">',
-        '追击': '<img src="images/skill/skill-45.png" width="20">',
-        '防绑': '<img src="images/skill/skill-52.png" width="20">',
-        '防云': '<img src="images/skill/skill-54.png" width="20">',
-        '防贴条': '<img src="images/skill/skill-55.png" width="20">',
-        '防黑': '<img src="images/skill/skill-68.png" width="20">',
-        '防废': '<img src="images/skill/skill-69.png" width="20">',
-        '防毒': '<img src="images/skill/skill-70.png" width="20">',
-        '破无效': '<img src="images/skill/skill-48.png" width="20">',
-        '防封技': '<img src="images/skill/skill-28.png" width="20">',
-        '防坐': '<img src="images/skill/skill2-11.png" width="20">',
-        '火': '<img src="images/drops/Fire.png" width="20">',
-        '水': '<img src="images/drops/Water.png" width="20">',
-        '木': '<img src="images/drops/Wood.png" width="20">',
-        '光': '<img src="images/drops/Light.png" width="20">',
-        '暗': '<img src="images/drops/Dark.png" width="20">',
-    }
+    let stage_note = {};
 
     const addStyle = (css) => {
         const style = document.createElement('style');
@@ -79,6 +51,38 @@
         .stage-summary img+img {margin-left: 3px;}
 
     `);
+
+    const load_stage_note = () => {
+        try{
+            stage_note = JSON.parse(localStorage.getItem('stageNote'));
+            if (!stage_note) { stage_note = {} }
+        }catch(error){
+            stage_note = {}
+        }
+    }
+
+    const save_stage_note = () => {
+        localStorage.setItem('stageNote', JSON.stringify(stage_note));
+    }
+
+    const player_skill_map = {
+        '解锁': '<img src="images/skill/skill-60.png" width="20">',
+        '追击': '<img src="images/skill/skill-45.png" width="20">',
+        '防绑': '<img src="images/skill/skill-52.png" width="20">',
+        '防云': '<img src="images/skill/skill-54.png" width="20">',
+        '防贴条': '<img src="images/skill/skill-55.png" width="20">',
+        '防黑': '<img src="images/skill/skill-68.png" width="20">',
+        '防废': '<img src="images/skill/skill-69.png" width="20">',
+        '防毒': '<img src="images/skill/skill-70.png" width="20">',
+        '破无效': '<img src="images/skill/skill-48.png" width="20">',
+        '防封技': '<img src="images/skill/skill-28.png" width="20">',
+        '防坐': '<img src="images/skill/skill2-11.png" width="20">',
+        '火': '<img src="images/drops/Fire.png" width="20">',
+        '水': '<img src="images/drops/Water.png" width="20">',
+        '木': '<img src="images/drops/Wood.png" width="20">',
+        '光': '<img src="images/drops/Light.png" width="20">',
+        '暗': '<img src="images/drops/Dark.png" width="20">',
+    }    
 
     const skill_detail_map = [
         {t: 'indexOf', find: '隨機生成<img src="images/drops/Poison.png" width="20">', action: 'flagOn', flag: '转毒'},
@@ -414,10 +418,35 @@
         return prevent_detail;
     }
 
+    const update_stage_note_block = () => {
+        let $block = $('.stage-note-block');
+        if ($block.length == 0){ console.error('预料外的错误，stage-note-block不存在，请检查');return; }
+        let stage_name = $('head>title').text().replace('- Puzzle & Dragons 戰友系統及資訊網', '').trim();
+        $block.empty();
+        $block.append('<div class="sub-title">笔记</div>');
+
+        let stage = {
+            note: 'test',
+            skill: ['解锁', '追击']
+        }
+
+        let $note_table = $('<table class="stage-note" cellspacing="0"></table>').appendTo($block);
+        if (stage.note != ''){
+            $note_table.append('<tr><th>说明</td></tr>');
+            $note_table.append('<tr><td>'+(stage.note ? stage.note : '待写')+'</td></tr>');
+        }
+        if (stage.skill && Object.keys(stage.skill).length > 0){
+            $note_table.append('<tr><th>推荐技能</td></tr>');
+            let $td = $('<td></td>').appendTo($('<tr></tr>').appendTo($note_table));
+            for (let skill of stage.skill){
+                $td.append(player_skill_map[skill]);
+            }
+        }
+    }
+
     const create_stage_summary_block = (all_monster_info) =>{
         let $base = $('#wrapper>table:nth-of-type(3)>tbody>tr>td:nth-of-type(3)')
         if (all_monster_info.length == 0){ return; }
-        let stage_name = $('head>title').text().replace('- Puzzle & Dragons 戰友系統及資訊網', '').trim();
         let $top = $('.stage-information');
         if ($top.length == 1){
             $top.empty();
@@ -431,30 +460,18 @@
             $monster_detail = $('<div class="monster-detail-block sticky-on normal-hide"></div>').appendTo($base);
         }
 
-        let $stage_note_block = $('<div class="stage-note-block"></div>').appendTo($top);
-        // 手工笔记
-        if (stage_note[stage_name]){
-            $stage_note_block.append('<div class="sub-title">笔记</div>');
-            let $note_table = $('<table class="stage-note" cellspacing="0"></table>').appendTo($stage_note_block);
-            if (stage_note[stage_name].note != ''){
-                $note_table.append('<tr><th>说明</td></tr>');
-                $note_table.append('<tr><td>'+stage_note[stage_name].note+'</td></tr>');
-            }
-            if (stage_note[stage_name].skill && stage_note[stage_name].skill.length > 0){
-                $note_table.append('<tr><th>推荐技能</td></tr>');
-                let $td = $('<td></td>').appendTo($('<tr></tr>').appendTo($note_table));
-                for (let skill of stage_note[stage_name].skill){
-                    $td.append(player_skill_map[skill]);
-                }
-            }
-        }
+        let $block; // 临时变量
+
+        $('<div class="stage-note-block"></div>').appendTo($top);
+        update_stage_note_block();
 
         // 预防技能总结
         let prevent_detail = get_prevent_detail(all_monster_info);
         // console.log(prevent_detail);
         if (prevent_detail.has_first || prevent_detail.has_normal){
-            $stage_note_block.append('<div class="sub-title">总结</div>');
-            let $note_table = $('<table class="stage-summary" cellspacing="0"></table>').appendTo($stage_note_block);
+            $block = $('<div class="stage-summary-block"></div>').appendTo($top);
+            $block.append('<div class="sub-title">总结</div>');
+            let $note_table = $('<table class="stage-summary" cellspacing="0"></table>').appendTo($block);
             let $tr, $td;
             if (prevent_detail.has_first){
                 $tr = $('<tr></tr>').appendTo($note_table);
@@ -568,6 +585,12 @@
         }
     });
 
-    console.log(find_all_monster_info());
-    create_stage_summary_block(find_all_monster_info());
+    const main = () => {
+        console.log(find_all_monster_info());
+        load_stage_note();
+
+        create_stage_summary_block(find_all_monster_info());
+    }
+
+    main();
 })();
